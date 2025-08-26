@@ -1,47 +1,88 @@
 <!DOCTYPE html>
-<html lang="pt-BR">
+<html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Pokédex</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pokedex - English Version</title>
   <style>
     body {
+      font-family: Arial, sans-serif;
+      background-color: #353538;
       margin: 0;
-      font-family: 'Segoe UI', sans-serif;
-      background-color: #f2f2f2;
+      padding: 20px;
     }
 
     .pokedex {
+      max-width: 800px;
+      margin: auto;
+      background-color: #fff;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      text-align: center;
+      text-transform: capitalize;
+      color: #333;
+    }
+
+    #pokemon-image img {
+      display: block;
+      margin: 10px auto;
+      max-width: 200px;
+      height: auto;
+    }
+
+    #pokemon-info, #pokemon-stats, #pokemon-evolution, #pokemon-moves {
+      margin-top: 20px;
+    }
+
+    h2 {
+      color: #444;
+      margin-bottom: 10px;
+    }
+
+    p strong {
+      color: #555;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    ul li {
+      margin: 5px 0;
       display: flex;
-      flex-direction: column;
-      align-items: center;
-      padding: 1rem;
-      min-height: 100vh;
+      justify-content: space-between;
+      background-color: #f6f6f6;
+      padding: 5px 10px;
+      border-radius: 5px;
     }
 
     .search-box {
       display: flex;
-      margin-bottom: 1rem;
-      width: 100%;
-      max-width: 400px;
+      justify-content: center;
+      margin-bottom: 20px;
+      gap: 10px;
     }
 
     .search-box input {
-      flex: 1;
-      padding: 0.6rem;
+      padding: 8px;
       font-size: 1rem;
+      border-radius: 5px;
       border: 1px solid #ccc;
-      border-radius: 8px 0 0 8px;
-      outline: none;
+      width: 200px;
     }
 
     .search-box button {
-      padding: 0.6rem 1rem;
+      padding: 8px 12px;
       font-size: 1rem;
       border: none;
+      border-radius: 5px;
       background-color: #e3350d;
-      color: white;
-      border-radius: 0 8px 8px 0;
+      color: #fff;
       cursor: pointer;
     }
 
@@ -49,163 +90,159 @@
       background-color: #cc2c0b;
     }
 
-    .card {
-      background-color: #fff;
-      border-radius: 16px;
-      box-shadow: 0 0 12px rgba(0, 0, 0, 0.1);
-      padding: 1.5rem;
-      width: 100%;
-      max-width: 400px;
-      text-align: center;
-    }
-
-    .pokemon-img img {
-      width: 150px;
-      height: 150px;
-    }
-
-    h1 {
-      margin-top: 1rem;
-      text-transform: capitalize;
-      color: #333;
-    }
-
-    .info-section {
-      margin-top: 1.5rem;
-      text-align: left;
-    }
-
-    .info-section h2 {
-      margin-bottom: 0.5rem;
-      font-size: 1.1rem;
-      color: #555;
-    }
-
-    ul {
-      list-style: none;
-      padding: 0;
-      margin: 0;
-    }
-
-    ul li {
-      background-color: #f6f6f6;
-      margin-bottom: 0.4rem;
-      padding: 0.5rem 0.75rem;
-      border-radius: 8px;
-      font-size: 0.95rem;
-      display: flex;
-      justify-content: space-between;
-    }
-
-    @media (min-width: 600px) {
-      .card {
-        padding: 2rem;
-      }
-
-      .pokemon-img img {
-        width: 180px;
-        height: 180px;
-      }
+    .move-level {
+      font-weight: bold;
+      margin-top: 10px;
     }
   </style>
 </head>
 <body>
-  <main class="pokedex">
+  <div class="pokedex">
     <div class="search-box">
-      <input
-        type="text"
-        id="pokemon-input"
-        placeholder="Digite o nome ou ID do Pokémon"
-      />
-      <button onclick="searchPokemon()">Buscar</button>
+      <input type="text" id="pokemon-input" placeholder="Enter Pokemon name or ID">
+      <button onclick="searchPokemon()">Search</button>
     </div>
 
-    <div class="card">
-      <div class="pokemon-img" id="pokemon-img"></div>
-      <h1 id="pokemon-name">Digite um Pokémon</h1>
+    <h1 id="pokemon-name">Enter a Pokemon</h1>
+    <div id="pokemon-image"></div>
 
-      <section class="info-section">
-        <h2>Habilidades</h2>
-        <ul id="abilities"></ul>
-      </section>
-
-      <section class="info-section">
-        <h2>Status</h2>
-        <ul id="stats"></ul>
-      </section>
+    <div id="pokemon-info">
+      <p><strong>Type(s):</strong> <span id="pokemon-types"></span></p>
+      <p><strong>Height:</strong> <span id="pokemon-height"></span></p>
+      <p><strong>Weight:</strong> <span id="pokemon-weight"></span></p>
+      <p><strong>Species:</strong> <span id="pokemon-species"></span></p>
+      <p><strong>Abilities:</strong></p>
+      <ul id="pokemon-abilities"></ul>
     </div>
-  </main>
+
+    <div id="pokemon-stats">
+      <h2>Stats</h2>
+      <ul>
+        <li>HP: <span id="stat-hp"></span></li>
+        <li>Attack: <span id="stat-attack"></span></li>
+        <li>Defense: <span id="stat-defense"></span></li>
+        <li>Special Attack: <span id="stat-sp-atk"></span></li>
+        <li>Special Defense: <span id="stat-sp-def"></span></li>
+        <li>Speed: <span id="stat-speed"></span></li>
+        <li>Total: <span id="stat-total"></span></li>
+      </ul>
+    </div>
+
+    <div id="pokemon-evolution">
+      <h2>Evolution</h2>
+      <p id="evolution-chain"></p>
+    </div>
+
+    <div id="pokemon-moves">
+      <h2>Level-Up Moves</h2>
+      <div id="moves-learned"></div>
+    </div>
+  </div>
 
   <script>
-    async function fetchPokemon(query) {
-      const name = query.toLowerCase().trim();
-      const url = `https://pokeapi.co/api/v2/pokemon/${name}`;
+    async function fetchPokemonData(pokemonName) {
+      if(!pokemonName) return;
 
       try {
-        const res = await fetch(url);
-        if (!res.ok) throw new Error('Pokémon não encontrado');
-        const data = await res.json();
-        return data;
+        const url = `https://pokeapi.co/api/v2/pokemon/${pokemonName.toLowerCase()}`;
+        const response = await fetch(url);
+        if(!response.ok) throw new Error('Pokémon not found');
+        const data = await response.json();
+
+        // Name
+        document.getElementById('pokemon-name').textContent = capitalize(data.name);
+        // Image
+        document.getElementById('pokemon-image').innerHTML = `<img src="${data.sprites.front_default}" alt="${data.name}">`;
+        // Types
+        document.getElementById('pokemon-types').textContent = data.types.map(t => capitalize(t.type.name)).join(', ');
+        // Height & Weight
+        document.getElementById('pokemon-height').textContent = `${data.height / 10} m`;
+        document.getElementById('pokemon-weight').textContent = `${data.weight / 10} kg`;
+        // Species
+        const speciesResponse = await fetch(data.species.url);
+        const speciesData = await speciesResponse.json();
+        document.getElementById('pokemon-species').textContent = capitalize(speciesData.name);
+
+        // Abilities
+        const abilitiesUl = document.getElementById('pokemon-abilities');
+        abilitiesUl.innerHTML = '';
+        data.abilities
+          .sort((a,b) => a.is_hidden - b.is_hidden) // ocultas por último
+          .forEach((ability, index) => {
+            const li = document.createElement('li');
+            let text = `${index+1}. ${capitalize(ability.ability.name)}`;
+            if(ability.is_hidden) text += ' (Hidden)';
+            li.textContent = text;
+            abilitiesUl.appendChild(li);
+          });
+
+        // Stats
+        const stats = data.stats;
+        document.getElementById('stat-hp').textContent = stats[0].base_stat;
+        document.getElementById('stat-attack').textContent = stats[1].base_stat;
+        document.getElementById('stat-defense').textContent = stats[2].base_stat;
+        document.getElementById('stat-sp-atk').textContent = stats[3].base_stat;
+        document.getElementById('stat-sp-def').textContent = stats[4].base_stat;
+        document.getElementById('stat-speed').textContent = stats[5].base_stat;
+        document.getElementById('stat-total').textContent = stats.reduce((t,s) => t + s.base_stat, 0);
+
+        // Evolution
+        const evolutionChainResponse = await fetch(speciesData.evolution_chain.url);
+        const evolutionChainData = await evolutionChainResponse.json();
+        let evolutionText = '';
+        let current = evolutionChainData.chain;
+        while(current) {
+          evolutionText += capitalize(current.species.name) + ' → ';
+          current = current.evolves_to[0];
+        }
+        document.getElementById('evolution-chain').textContent = evolutionText.slice(0, -3);
+
+        // Level-Up Moves
+        const levelMoves = {};
+        data.moves.forEach(moveEntry => {
+          moveEntry.version_group_details.forEach(detail => {
+            if(detail.move_learn_method.name === 'level-up') {
+              const level = detail.level_learned_at;
+              if(!levelMoves[level]) levelMoves[level] = new Set();
+              levelMoves[level].add(moveEntry.move.name.replace('-', ' '));
+            }
+          });
+        });
+
+        const movesDiv = document.getElementById('moves-learned');
+        movesDiv.innerHTML = '';
+        Object.keys(levelMoves).sort((a,b)=>a-b).forEach(level => {
+          const levelTitle = document.createElement('p');
+          levelTitle.className = 'move-level';
+          levelTitle.textContent = `Level ${level}`;
+          movesDiv.appendChild(levelTitle);
+
+          const ul = document.createElement('ul');
+          levelMoves[level].forEach(move => {
+            const li = document.createElement('li');
+            li.textContent = capitalize(move);
+            ul.appendChild(li);
+          });
+          movesDiv.appendChild(ul);
+        });
+
       } catch (err) {
-        console.error(err);
-        return null;
+        alert(err.message);
       }
     }
 
-    function clearCard() {
-      document.getElementById('pokemon-img').innerHTML = '';
-      document.getElementById('abilities').innerHTML = '';
-      document.getElementById('stats').innerHTML = '';
+    function searchPokemon() {
+      const input = document.getElementById('pokemon-input').value;
+      fetchPokemonData(input);
     }
 
-    function updateCard(data) {
-      clearCard();
-
-      const nameElement = document.getElementById('pokemon-name');
-      const imgContainer = document.getElementById('pokemon-img');
-      const abilitiesList = document.getElementById('abilities');
-      const statsList = document.getElementById('stats');
-
-      if (!data) {
-        nameElement.textContent = 'Pokémon não encontrado';
-        return;
-      }
-
-      nameElement.textContent = data.name;
-
-      const img = document.createElement('img');
-      img.src = data.sprites.front_default || '';
-      img.alt = data.name;
-      imgContainer.appendChild(img);
-
-      data.abilities.forEach(ability => {
-        const li = document.createElement('li');
-        li.textContent = ability.ability.name + (ability.is_hidden ? ' (Oculta)' : '');
-        abilitiesList.appendChild(li);
-      });
-
-      data.stats.forEach(stat => {
-        const li = document.createElement('li');
-        li.innerHTML = `<span>${stat.stat.name}</span><span>${stat.base_stat}</span>`;
-        statsList.appendChild(li);
-      });
-    }
-
-    async function searchPokemon() {
-      const input = document.getElementById('pokemon-input');
-      const query = input.value;
-      if (!query) return;
-
-      const data = await fetchPokemon(query);
-      updateCard(data);
-    }
-
-    // Permitir buscar com Enter
-    document.getElementById('pokemon-input').addEventListener('keydown', function (e) {
-      if (e.key === 'Enter') {
-        searchPokemon();
-      }
+    document.getElementById('pokemon-input').addEventListener('keydown', e=>{
+      if(e.key === 'Enter') searchPokemon();
     });
+
+    function capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1);
+    }
   </script>
 </body>
 </html>
